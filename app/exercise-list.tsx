@@ -49,27 +49,39 @@ export default function ExerciseList() {
 </View>
 
       <ScrollView contentContainerStyle={styles.scrollList}>
-        {filteredExercises.length === 0 ? (
-  <Text style={styles.noResults}>No exercises found</Text>
-) : (
-  filteredExercises.map((ex) => (
-          <TouchableOpacity 
-            key={ex.id} 
-            style={styles.card}
-            onPress={() => router.push({
-              pathname: '/timer',
-              params: { name: ex.name, duration: calculateDuration(ex.met), icon: ex.icon , met: ex.met }
-            })}
-          >
-            <View style={styles.cardIcon}><Text style={{fontSize: 30}}>{ex.icon}</Text></View>
-            <View style={styles.cardInfo}>
-              <Text style={styles.exerciseTitle}>{ex.name}</Text>
-              <Text style={styles.exerciseSub}>{ex.detail} • {calculateDuration(ex.met)} min</Text>
-            </View>
-            <Text style={styles.purpleArrow}>›</Text>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
+  {filteredExercises.length === 0 ? (
+    <Text style={styles.noResults}>No exercises found</Text>
+  ) : (
+    filteredExercises.map((ex) => (
+      <TouchableOpacity 
+        key={ex.id} 
+        style={styles.card}
+        onPress={() => router.push({
+          pathname: '/timer',
+          params: { 
+            name: ex.name, 
+            duration: calculateDuration(ex.met), 
+            icon: ex.icon, 
+            met: ex.met 
+          }
+        })}
+      >
+        <View style={styles.cardIcon}>
+          <Text style={{ fontSize: 30 }}>{ex.icon}</Text>
+        </View>
+
+        <View style={styles.cardInfo}>
+          <Text style={styles.exerciseTitle}>{ex.name}</Text>
+          <Text style={styles.exerciseSub}>
+            {ex.detail} • {calculateDuration(ex.met)} min
+          </Text>
+        </View>
+
+        <Text style={styles.purpleArrow}>›</Text>
+      </TouchableOpacity>
+    ))
+  )}
+</ScrollView>
       <View style={styles.bottomWaves}>
          <View style={[styles.wave, {backgroundColor: '#EBDDFF', height: 80}]} />
          <View style={[styles.wave, {backgroundColor: '#B57DFF', height: 50, opacity: 0.8}]} />
