@@ -37,17 +37,22 @@ export default function ExerciseList() {
         <View style={styles.profileIcon}><Text>👩</Text></View>
       </View>
 
-      <View style={styles.searchContainer}>
+<View style={styles.searchContainer}>
+  <Text style={styles.searchIcon}>🔍</Text>
   <TextInput
     placeholder="Search exercise..."
     value={searchQuery}
     onChangeText={setSearchQuery}
     style={styles.searchInput}
+    placeholderTextColor="#999"
   />
 </View>
 
       <ScrollView contentContainerStyle={styles.scrollList}>
-        {filteredExercises.map((ex) => (
+        {filteredExercises.length === 0 ? (
+  <Text style={styles.noResults}>No exercises found</Text>
+) : (
+  filteredExercises.map((ex) => (
           <TouchableOpacity 
             key={ex.id} 
             style={styles.card}
@@ -74,22 +79,35 @@ export default function ExerciseList() {
 }
 
 const styles = StyleSheet.create({
-  searchContainer: {
-  paddingHorizontal: 25,
-  marginBottom: 10,
-},
-
-searchInput: {
+searchContainer: {
+  flexDirection: 'row',
+  alignItems: 'center',
   backgroundColor: '#FFFFFF',
+  marginHorizontal: 25,
+  marginBottom: 15,
   borderRadius: 15,
-  padding: 14,
-  fontSize: 16,
+  paddingHorizontal: 15,
+  height: 50,
   shadowColor: '#000',
   shadowOpacity: 0.05,
   shadowRadius: 5,
   elevation: 3,
 },
-  container: { flex: 1, backgroundColor: '#F9F7FF' },
+
+searchInput: {
+  flex: 1,
+  fontSize: 16,
+  marginLeft: 10,
+},
+
+searchIcon: {
+  fontSize: 18,
+},
+
+container: { 
+  flex: 1, 
+  backgroundColor: '#F9F7FF' 
+},
   topDecoration: { position: 'absolute', top: -50, left: -50, width: 250, height: 250, backgroundColor: '#E6F4E1', borderRadius: 125, zIndex: -1 },
   header: { flexDirection: 'row', justifyContent: 'space-between', padding: 20, alignItems: 'center' },
   backButton: { padding: 10 },
@@ -107,6 +125,12 @@ searchInput: {
   shadowOpacity: 0.08,
   shadowRadius: 8,
   elevation: 4,
+},
+noResults: {
+  textAlign: 'center',
+  marginTop: 40,
+  fontSize: 16,
+  color: '#999',
 },
   cardIcon: { 
   width: 60, 
