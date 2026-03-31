@@ -60,14 +60,25 @@ export default function ExerciseList() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#FFF' },
+  container: { flex: 1, backgroundColor: '#F9F7FF' },
   topDecoration: { position: 'absolute', top: -50, left: -50, width: 250, height: 250, backgroundColor: '#E6F4E1', borderRadius: 125, zIndex: -1 },
   header: { flexDirection: 'row', justifyContent: 'space-between', padding: 20, alignItems: 'center' },
   backButton: { padding: 10 },
   backArrow: { fontSize: 40, color: '#A5C94E' },
   profileIcon: { width: 45, height: 45, borderRadius: 22, backgroundColor: '#FFD3E0', justifyContent: 'center', alignItems: 'center' },
   scrollList: { paddingHorizontal: 25, paddingTop: 10, paddingBottom: 100 },
-  card: { flexDirection: 'row', backgroundColor: '#F5F5F5', borderRadius: 20, padding: 15, marginBottom: 15, alignItems: 'center' },
+  card: { 
+  flexDirection: 'row',
+  backgroundColor: '#FFFFFF',
+  borderRadius: 18,
+  padding: 18,
+  marginBottom: 18,
+  alignItems: 'center',
+  shadowColor: '#000',
+  shadowOpacity: 0.08,
+  shadowRadius: 8,
+  elevation: 4,
+},
   cardIcon: { width: 60, height: 60, justifyContent: 'center', alignItems: 'center' },
   cardInfo: { flex: 1, marginLeft: 10 },
   exerciseTitle: { fontSize: 18, fontWeight: 'bold', color: '#B57DFF' },
