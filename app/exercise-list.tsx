@@ -1,6 +1,6 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useState } from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View, TextInput } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View, TextInput, Animated } from 'react-native';
 
 export default function ExerciseList() {
   const { calories } = useLocalSearchParams();
@@ -37,12 +37,14 @@ export default function ExerciseList() {
         <View style={styles.profileIcon}><Text>👩</Text></View>
       </View>
 
-      <View style={styles.searchContainer}>
+<View style={styles.searchContainer}>
+  <Text style={styles.searchIcon}>🔍</Text>
   <TextInput
     placeholder="Search exercise..."
     value={searchQuery}
     onChangeText={setSearchQuery}
     style={styles.searchInput}
+    placeholderTextColor="#999"
   />
 </View>
 
@@ -132,19 +134,33 @@ const styles = StyleSheet.create({
   color: '#6C63FF',
   marginLeft: 10
 },
-  searchContainer: {
-  paddingHorizontal: 25,
-  marginBottom: 10,
-},
-  searchInput: {
+searchContainer: {
+  flexDirection: 'row',
+  alignItems: 'center',
   backgroundColor: '#FFFFFF',
+  marginHorizontal: 25,
+  marginBottom: 15,
   borderRadius: 15,
-  padding: 14,
-  fontSize: 16,
+  paddingHorizontal: 15,
+  height: 50,
   shadowColor: '#000',
   shadowOpacity: 0.05,
   shadowRadius: 5,
   elevation: 3,
+},
+  searchInput: {
+  flex: 1,
+  fontSize: 16,
+  marginLeft: 10,
+},
+  searchIcon: {
+  fontSize: 18,
+},
+  noResults: {
+  textAlign: 'center',
+  marginTop: 40,
+  fontSize: 16,
+  color: '#999',
 },
   bottomWaves: { position: 'absolute', bottom: 0, width: '100%' },
   wave: { width: '100%', borderTopLeftRadius: 100, borderTopRightRadius: 100, position: 'absolute', bottom: 0 }
