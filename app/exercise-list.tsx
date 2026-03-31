@@ -6,6 +6,15 @@ export default function ExerciseList() {
   const { calories } = useLocalSearchParams();
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
+  const fadeAnim = new Animated.Value(0);
+
+React.useEffect(() => {
+  Animated.timing(fadeAnim, {
+    toValue: 1,
+    duration: 600,
+    useNativeDriver: true,
+  }).start();
+}, []);
   
   const userWeight = 70; 
   const inputCalories = parseFloat(calories as string) || 0;
@@ -53,32 +62,34 @@ export default function ExerciseList() {
     <Text style={styles.noResults}>No exercises found</Text>
   ) : (
     filteredExercises.map((ex) => (
-      <TouchableOpacity 
-        key={ex.id} 
-        style={styles.card}
-        onPress={() => router.push({
-          pathname: '/timer',
-          params: { 
-            name: ex.name, 
-            duration: calculateDuration(ex.met), 
-            icon: ex.icon, 
-            met: ex.met 
-          }
-        })}
-      >
-        <View style={styles.cardIcon}>
-          <Text style={{ fontSize: 30 }}>{ex.icon}</Text>
-        </View>
+      <Animated.View style={{ opacity: fadeAnim }}>
+  <TouchableOpacity 
+    key={ex.id} 
+    style={styles.card}
+    onPress={() => router.push({
+      pathname: '/timer',
+      params: { 
+        name: ex.name, 
+        duration: calculateDuration(ex.met), 
+        icon: ex.icon, 
+        met: ex.met 
+      }
+    })}
+  >
+    <View style={styles.cardIcon}>
+      <Text style={{ fontSize: 30 }}>{ex.icon}</Text>
+    </View>
 
-        <View style={styles.cardInfo}>
-          <Text style={styles.exerciseTitle}>{ex.name}</Text>
-          <Text style={styles.exerciseSub}>
-            {ex.detail} • {calculateDuration(ex.met)} min
-          </Text>
-        </View>
+    <View style={styles.cardInfo}>
+      <Text style={styles.exerciseTitle}>{ex.name}</Text>
+      <Text style={styles.exerciseSub}>
+        {ex.detail} • {calculateDuration(ex.met)} min
+      </Text>
+    </View>
 
-        <Text style={styles.purpleArrow}>›</Text>
-      </TouchableOpacity>
+    <Text style={styles.purpleArrow}>›</Text>
+  </TouchableOpacity>
+</Animated.View>
     ))
   )}
 </ScrollView>
