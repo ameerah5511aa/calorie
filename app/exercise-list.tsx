@@ -1,10 +1,11 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import React from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useState } from 'react';
+import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View, TextInput } from 'react-native';
 
 export default function ExerciseList() {
   const { calories } = useLocalSearchParams();
   const router = useRouter();
+  const [searchQuery, setSearchQuery] = useState('');
   
   const userWeight = 70; 
   const inputCalories = parseFloat(calories as string) || 0;
@@ -16,6 +17,10 @@ export default function ExerciseList() {
     { id: 4, name: 'Running', detail: 'outdoor', met: 9.0, icon: '🏃' },
     { id: 5, name: 'Rowing Machine', detail: 'standard', met: 6.0, icon: '🚣‍♂️' },
   ];
+
+  const filteredExercises = exercisesDB.filter((ex) =>
+  ex.name.toLowerCase().includes(searchQuery.toLowerCase())
+);
 
   const calculateDuration = (met: number) => {
     const duration = (inputCalories * 200) / (met * 3.5 * userWeight);
@@ -32,25 +37,49 @@ export default function ExerciseList() {
         <View style={styles.profileIcon}><Text>👩</Text></View>
       </View>
 
+      <View style={styles.searchContainer}>
+  <TextInput
+    placeholder="Search exercise..."
+    value={searchQuery}
+    onChangeText={setSearchQuery}
+    style={styles.searchInput}
+  />
+</View>
+
       <ScrollView contentContainerStyle={styles.scrollList}>
-        {exercisesDB.map((ex) => (
-          <TouchableOpacity 
-            key={ex.id} 
-            style={styles.card}
-            onPress={() => router.push({
-              pathname: '/timer',
-              params: { name: ex.name, duration: calculateDuration(ex.met), icon: ex.icon , met: ex.met }
-            })}
-          >
-            <View style={styles.cardIcon}><Text style={{fontSize: 30}}>{ex.icon}</Text></View>
-            <View style={styles.cardInfo}>
-              <Text style={styles.exerciseTitle}>{ex.name}</Text>
-              <Text style={styles.exerciseSub}>{ex.detail} • {calculateDuration(ex.met)} min</Text>
-            </View>
-            <Text style={styles.purpleArrow}>›</Text>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
+  {filteredExercises.length === 0 ? (
+    <Text style={styles.noResults}>No exercises found</Text>
+  ) : (
+    filteredExercises.map((ex) => (
+      <TouchableOpacity 
+        key={ex.id} 
+        style={styles.card}
+        onPress={() => router.push({
+          pathname: '/timer',
+          params: { 
+            name: ex.name, 
+            duration: calculateDuration(ex.met), 
+            icon: ex.icon, 
+            met: ex.met 
+          }
+        })}
+      >
+        <View style={styles.cardIcon}>
+          <Text style={{ fontSize: 30 }}>{ex.icon}</Text>
+        </View>
+
+        <View style={styles.cardInfo}>
+          <Text style={styles.exerciseTitle}>{ex.name}</Text>
+          <Text style={styles.exerciseSub}>
+            {ex.detail} • {calculateDuration(ex.met)} min
+          </Text>
+        </View>
+
+        <Text style={styles.purpleArrow}>›</Text>
+      </TouchableOpacity>
+    ))
+  )}
+</ScrollView>
       <View style={styles.bottomWaves}>
          <View style={[styles.wave, {backgroundColor: '#EBDDFF', height: 80}]} />
          <View style={[styles.wave, {backgroundColor: '#B57DFF', height: 50, opacity: 0.8}]} />
@@ -79,11 +108,44 @@ const styles = StyleSheet.create({
   shadowRadius: 8,
   elevation: 4,
 },
-  cardIcon: { width: 60, height: 60, justifyContent: 'center', alignItems: 'center' },
+  cardIcon: { 
+  width: 60, 
+  height: 60, 
+  borderRadius: 15,
+  backgroundColor: '#F3F0FF',
+  justifyContent: 'center', 
+  alignItems: 'center' 
+},
   cardInfo: { flex: 1, marginLeft: 10 },
-  exerciseTitle: { fontSize: 18, fontWeight: 'bold', color: '#B57DFF' },
-  exerciseSub: { fontSize: 13, color: '#888' },
-  purpleArrow: { fontSize: 28, color: '#B57DFF' },
+  exerciseTitle: { 
+  fontSize: 20, 
+  fontWeight: '700', 
+  color: '#6C63FF' 
+},
+  exerciseSub: { 
+  fontSize: 14, 
+  color: '#666',
+  marginTop: 4
+},
+  purpleArrow: { 
+  fontSize: 26, 
+  color: '#6C63FF',
+  marginLeft: 10
+},
+  searchContainer: {
+  paddingHorizontal: 25,
+  marginBottom: 10,
+},
+  searchInput: {
+  backgroundColor: '#FFFFFF',
+  borderRadius: 15,
+  padding: 14,
+  fontSize: 16,
+  shadowColor: '#000',
+  shadowOpacity: 0.05,
+  shadowRadius: 5,
+  elevation: 3,
+},
   bottomWaves: { position: 'absolute', bottom: 0, width: '100%' },
   wave: { width: '100%', borderTopLeftRadius: 100, borderTopRightRadius: 100, position: 'absolute', bottom: 0 }
 });
