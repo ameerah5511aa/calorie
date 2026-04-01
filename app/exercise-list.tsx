@@ -1,20 +1,11 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useState } from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View, TextInput, Animated } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View, TextInput } from 'react-native';
 
 export default function ExerciseList() {
   const { calories } = useLocalSearchParams();
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
-  const fadeAnim = new Animated.Value(0);
-
-React.useEffect(() => {
-  Animated.timing(fadeAnim, {
-    toValue: 1,
-    duration: 600,
-    useNativeDriver: true,
-  }).start();
-}, []);
   
   const userWeight = 70; 
   const inputCalories = parseFloat(calories as string) || 0;
@@ -62,34 +53,32 @@ React.useEffect(() => {
     <Text style={styles.noResults}>No exercises found</Text>
   ) : (
     filteredExercises.map((ex) => (
-      <Animated.View style={{ opacity: fadeAnim }}>
-  <TouchableOpacity 
-    key={ex.id} 
-    style={styles.card}
-    onPress={() => router.push({
-      pathname: '/timer',
-      params: { 
-        name: ex.name, 
-        duration: calculateDuration(ex.met), 
-        icon: ex.icon, 
-        met: ex.met 
-      }
-    })}
-  >
-    <View style={styles.cardIcon}>
-      <Text style={{ fontSize: 30 }}>{ex.icon}</Text>
-    </View>
+      <TouchableOpacity 
+        key={ex.id} 
+        style={styles.card}
+        onPress={() => router.push({
+          pathname: '/timer',
+          params: { 
+            name: ex.name, 
+            duration: calculateDuration(ex.met), 
+            icon: ex.icon, 
+            met: ex.met 
+          }
+        })}
+      >
+        <View style={styles.cardIcon}>
+          <Text style={{ fontSize: 30 }}>{ex.icon}</Text>
+        </View>
 
-    <View style={styles.cardInfo}>
-      <Text style={styles.exerciseTitle}>{ex.name}</Text>
-      <Text style={styles.exerciseSub}>
-        {ex.detail} • {calculateDuration(ex.met)} min
-      </Text>
-    </View>
+        <View style={styles.cardInfo}>
+          <Text style={styles.exerciseTitle}>{ex.name}</Text>
+          <Text style={styles.exerciseSub}>
+            {ex.detail} • {calculateDuration(ex.met)} min
+          </Text>
+        </View>
 
-    <Text style={styles.purpleArrow}>›</Text>
-  </TouchableOpacity>
-</Animated.View>
+        <Text style={styles.purpleArrow}>›</Text>
+      </TouchableOpacity>
     ))
   )}
 </ScrollView>
@@ -102,7 +91,35 @@ React.useEffect(() => {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#F9F7FF' },
+searchContainer: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  backgroundColor: '#FFFFFF',
+  marginHorizontal: 25,
+  marginBottom: 15,
+  borderRadius: 15,
+  paddingHorizontal: 15,
+  height: 50,
+  shadowColor: '#000',
+  shadowOpacity: 0.05,
+  shadowRadius: 5,
+  elevation: 3,
+},
+
+searchInput: {
+  flex: 1,
+  fontSize: 16,
+  marginLeft: 10,
+},
+
+searchIcon: {
+  fontSize: 18,
+},
+
+container: { 
+  flex: 1, 
+  backgroundColor: '#F9F7FF' 
+},
   topDecoration: { position: 'absolute', top: -50, left: -50, width: 250, height: 250, backgroundColor: '#E6F4E1', borderRadius: 125, zIndex: -1 },
   header: { flexDirection: 'row', justifyContent: 'space-between', padding: 20, alignItems: 'center' },
   backButton: { padding: 10 },
@@ -120,6 +137,12 @@ const styles = StyleSheet.create({
   shadowOpacity: 0.08,
   shadowRadius: 8,
   elevation: 4,
+},
+noResults: {
+  textAlign: 'center',
+  marginTop: 40,
+  fontSize: 16,
+  color: '#999',
 },
   cardIcon: { 
   width: 60, 
@@ -144,34 +167,6 @@ const styles = StyleSheet.create({
   fontSize: 26, 
   color: '#6C63FF',
   marginLeft: 10
-},
-searchContainer: {
-  flexDirection: 'row',
-  alignItems: 'center',
-  backgroundColor: '#FFFFFF',
-  marginHorizontal: 25,
-  marginBottom: 15,
-  borderRadius: 15,
-  paddingHorizontal: 15,
-  height: 50,
-  shadowColor: '#000',
-  shadowOpacity: 0.05,
-  shadowRadius: 5,
-  elevation: 3,
-},
-  searchInput: {
-  flex: 1,
-  fontSize: 16,
-  marginLeft: 10,
-},
-  searchIcon: {
-  fontSize: 18,
-},
-  noResults: {
-  textAlign: 'center',
-  marginTop: 40,
-  fontSize: 16,
-  color: '#999',
 },
   bottomWaves: { position: 'absolute', bottom: 0, width: '100%' },
   wave: { width: '100%', borderTopLeftRadius: 100, borderTopRightRadius: 100, position: 'absolute', bottom: 0 }

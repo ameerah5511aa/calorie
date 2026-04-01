@@ -18,10 +18,10 @@ app.use(express.json());
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGODB_URI)
-    .then(() => console.log('✅ Connected to MongoDB'))
-    .catch(err => {
-        console.error('❌ Connection failed:', err);
-    });
+.then(() => console.log('✅ Connected to MongoDB'))
+.catch(err => {
+    console.error('❌ Connection failed:', err);
+});
 
 // --- Authentication Routes ---
 
@@ -77,6 +77,7 @@ app.post('/api/workouts', async (req, res) => {
         exerciseName: req.body.exerciseName,
         caloriesBurned: req.body.caloriesBurned,
         duration: req.body.duration,
+        userId: req.body.userId || 'anonymous', // added userId
     });
 
     try {

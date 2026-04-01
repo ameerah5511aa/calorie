@@ -1,53 +1,46 @@
-/**
- * Below are the colors that are used in the app. The colors are defined in the light and dark mode.
- * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.
- */
-
-import { Platform } from 'react-native';
-
-const tintColorLight = '#0a7ea4';
-const tintColorDark = '#fff';
-
 export const Colors = {
   light: {
-    text: '#11181C',
-    background: '#fff',
-    tint: tintColorLight,
-    icon: '#687076',
-    tabIconDefault: '#687076',
-    tabIconSelected: tintColorLight,
+    background: '#FFFFFF',
+    text: '#1F2937',
+    textSecondary: '#6B7280',
+    accent: '#00D084',          // primary green
+    purple: '#7C3AED',           // deep purple
+    purpleLight: '#F5F3FF',      // light purple background
+    border: '#E5E7EB',
+    warning: '#FF6B6B',
+    tabIconDefault: 'rgba(255,255,255,0.7)',
+    tabIconSelected: '#FFFFFF',
   },
   dark: {
-    text: '#ECEDEE',
     background: '#151718',
-    tint: tintColorDark,
-    icon: '#9BA1A6',
-    tabIconDefault: '#9BA1A6',
-    tabIconSelected: tintColorDark,
+    text: '#ECEDEE',
+    textSecondary: '#9BA1A6',
+    accent: '#00D084',
+    purple: '#7C3AED',
+    purpleLight: '#2D2A4A',
+    border: '#333',
+    warning: '#FF6B6B',
+    tabIconDefault: 'rgba(255,255,255,0.5)',
+    tabIconSelected: '#FFFFFF',
   },
 };
 
-export const Fonts = Platform.select({
-  ios: {
-    /** iOS `UIFontDescriptorSystemDesignDefault` */
-    sans: 'system-ui',
-    /** iOS `UIFontDescriptorSystemDesignSerif` */
-    serif: 'ui-serif',
-    /** iOS `UIFontDescriptorSystemDesignRounded` */
-    rounded: 'ui-rounded',
-    /** iOS `UIFontDescriptorSystemDesignMonospaced` */
-    mono: 'ui-monospace',
+export const Fonts = {
+  headingLarge: {
+    fontSize: 32,
+    fontWeight: 'bold',
   },
-  default: {
-    sans: 'normal',
-    serif: 'serif',
-    rounded: 'normal',
-    mono: 'monospace',
+  headingMedium: {
+    fontSize: 24,
+    fontWeight: '600',
   },
-  web: {
-    sans: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
-    serif: "Georgia, 'Times New Roman', serif",
-    rounded: "'SF Pro Rounded', 'Hiragino Maru Gothic ProN', Meiryo, 'MS PGothic', sans-serif",
-    mono: "SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
+  body: {
+    fontSize: 16,
+    fontWeight: 'normal',
   },
-});
+  small: {
+    fontSize: 13,
+    fontWeight: 'normal',
+    color: '#6B7280',
+  },
+};

@@ -1,106 +1,69 @@
-import { useRouter } from 'expo-router';
+import { Colors } from '@/constants/theme';
+import { router } from 'expo-router';
 import React, { useState } from 'react';
-import { 
-  SafeAreaView, 
-  StyleSheet, 
-  Text, 
-  TextInput, 
-  TouchableOpacity, 
-  View, 
-  Alert, 
-  KeyboardAvoidingView, 
-  Platform, 
-  ScrollView, 
-  TouchableWithoutFeedback, 
-  Keyboard 
+import {
+  Alert,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-import axios from 'axios';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-export default function Page() {
-  const router = useRouter();
+export default function HomeScreen() {
+  const [calories, setCalories] = useState('');
 
-  // 1. تعريف حالات الإدخال
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-
-  // 2. دالة التسجيل والربط مع السيرفر
-  const handleSignUp = async () => {
-    if (!email || !password) {
-      Alert.alert("تنبيه", "الرجاء إدخال كافة البيانات");
+  const handleShowExercise = () => {
+    if (!calories) {
+      Alert.alert('Please enter calories');
       return;
     }
-
-    try {
-      // ملاحظة: تأكدي أن السيرفر يعمل على هذا الـ IP
-      const response = await axios.post('http://192.168.8.145:5000/api/users/signup', {
-        name: email, 
-        password: password
-      });
-
-      if (response.status === 201) {
-        Alert.alert("نجاح", "تم تسجيل حسابك وحفظه في MongoDB ✅");
-        router.push('/explore'); 
-      }
-    } catch (error) {
-      console.error(error);
-      Alert.alert("خطأ", "فشل الاتصال بالسيرفر. تأكدي أن السيرفر يعمل");
-    }
+    router.push('/explore');
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      {/* حل مشكلة غطاء لوحة المفاتيح */}
-      <KeyboardAvoidingView 
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={{ flex: 1 }}
-      >
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <ScrollView contentContainerStyle={styles.scrollContainer} bounces={false}>
-            
-            <View style={styles.main}>
-              <Text style={styles.logoText}>BurnIt</Text>
-              <Text style={styles.subtitle}>سجل الآن وابدأ رحلة اللياقة</Text>
+    <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
+      {/* Background blobs */}
+      <View style={styles.bgBlob} />
+      <View style={styles.bgLine} />
 
-              <View style={styles.inputContainer}>
-                <Text style={styles.label}>البريد الإلكتروني</Text>
-                <TextInput 
-                  style={styles.input} 
-                  placeholder="example@mail.com" 
-                  placeholderTextColor="#999"
-                  value={email}
-                  onChangeText={setEmail}
-                  autoCapitalize="none"
-                  keyboardType="email-address"
-                />
+      {/* Header with avatar */}
+      <View style={styles.header}>
+        <View style={styles.profileAvatar}>
+          <Text style={styles.avatarEmoji}>👩‍🦱</Text>
+        </View>
+      </View>
 
-                <Text style={styles.label}>كلمة المرور</Text>
-                <TextInput 
-                  style={styles.input} 
-                  placeholder="********" 
-                  secureTextEntry={true} 
-                  placeholderTextColor="#999"
-                  value={password}
-                  onChangeText={setPassword}
-                />
-              </View>
+      {/* Main content */}
+      <View style={styles.mainContent}>
+        <Text style={styles.inputLabel}>Enter Calories</Text>
+        <TextInput
+          style={styles.calorieInput}
+          value={calories}
+          onChangeText={setCalories}
+          keyboardType="numeric"
+          placeholder=""
+        />
+        <TouchableOpacity style={styles.actionBtn} onPress={handleShowExercise}>
+          <Text style={styles.actionBtnText}>show exercise</Text>
+        </TouchableOpacity>
 
-              <TouchableOpacity 
-                style={styles.loginButton} 
-                onPress={handleSignUp}
-              >
-                <Text style={styles.buttonText}>Sign Up</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity style={{ marginTop: 20 }}>
-                <Text style={{ color: '#7149C6', textAlign: 'center' }}>
-                  لديك حساب بالفعل؟ سجل دخولك
-                </Text>
-              </TouchableOpacity>
+        <View style={styles.warningCard}>
+          <TouchableOpacity style={styles.warningClose}>
+            <Text style={styles.warningCloseText}>✕</Text>
+          </TouchableOpacity>
+          <View style={styles.warningTitle}>
+            <View style={styles.warningIcon}>
+              <Text style={styles.warningIconText}>!</Text>
             </View>
-
-          </ScrollView>
-        </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
+            <Text style={styles.warningTitleText}>Health Warning</Text>
+          </View>
+          <Text style={styles.warningText}>
+            Consult your doctor before starting any training program.
+          </Text>
+        </View>
+      </View>
     </SafeAreaView>
   );
 }
@@ -110,59 +73,127 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
-  scrollContainer: {
-    flexGrow: 1,
-    justifyContent: 'center',
+  bgBlob: {
+    position: 'absolute',
+    top: -40,
+    left: -40,
+    width: 300,
+    height: 300,
+    backgroundColor: '#EAF8D1',
+    borderRadius: 150,
+    transform: [{ rotate: '15deg' }],
   },
-  main: {
+  bgLine: {
+    position: 'absolute',
+    top: 20,
+    left: -20,
+    width: 350,
+    height: 180,
+    borderTopWidth: 1.5,
+    borderTopColor: Colors.light.purple,
+    borderRadius: 200,
+    transform: [{ rotate: '-12deg' }],
+    opacity: 0.5,
+  },
+  header: {
     paddingHorizontal: 25,
-    paddingBottom: 20,
+    paddingTop: 20,
+    alignItems: 'flex-end',
   },
-  logoText: {
-    fontSize: 48,
-    fontWeight: 'bold',
-    color: '#7149C6',
-    textAlign: 'center',
-  },
-  subtitle: {
-    fontSize: 18,
-    color: '#666',
-    textAlign: 'center',
-    marginBottom: 40,
-  },
-  inputContainer: {
-    marginBottom: 20,
-  },
-  label: {
-    fontSize: 16,
-    color: '#333',
-    marginBottom: 8,
-    textAlign: 'right',
-  },
-  input: {
-    backgroundColor: '#fff',
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 15,
-    height: 55,
-    paddingHorizontal: 15,
-    marginBottom: 20,
-    textAlign: 'right',
-  },
-  loginButton: {
-    backgroundColor: '#00D68F',
-    height: 55,
-    borderRadius: 15,
+  profileAvatar: {
+    width: 45,
+    height: 45,
+    borderRadius: 22.5,
+    backgroundColor: '#FFD966',
+    borderWidth: 2,
+    borderColor: Colors.light.purple,
     justifyContent: 'center',
     alignItems: 'center',
-    elevation: 5,
-    shadowColor: '#00D68F',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
   },
-  buttonText: {
+  avatarEmoji: {
+    fontSize: 30,
+  },
+  mainContent: {
+    flex: 1,
+    paddingHorizontal: 30,
+    paddingTop: 40,
+    alignItems: 'center',
+  },
+  inputLabel: {
+    fontWeight: '700',
+    fontSize: 14,
+    marginBottom: 12,
+    color: Colors.light.text,
+  },
+  calorieInput: {
+    width: 180,
+    height: 45,
+    borderWidth: 1,
+    borderColor: Colors.light.border,
+    borderRadius: 10,
+    textAlign: 'center',
+    fontSize: 16,
+    marginBottom: 20,
+  },
+  actionBtn: {
+    backgroundColor: Colors.light.accent,
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 12,
+  },
+  actionBtnText: {
     color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: '600',
+    fontSize: 14,
+  },
+  warningCard: {
+    backgroundColor: Colors.light.purpleLight,
+    borderWidth: 1,
+    borderColor: '#DDD6FE',
+    borderRadius: 16,
+    marginTop: 60,
+    padding: 20,
+    width: '100%',
+    position: 'relative',
+  },
+  warningClose: {
+    position: 'absolute',
+    top: 10,
+    right: 12,
+  },
+  warningCloseText: {
+    fontSize: 12,
+    color: Colors.light.textSecondary,
+  },
+  warningTitle: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    marginBottom: 8,
+  },
+  warningIcon: {
+    width: 16,
+    height: 16,
+    borderRadius: 8,
+    borderWidth: 1.5,
+    borderColor: Colors.light.purple,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  warningIconText: {
+    fontSize: 10,
+    color: Colors.light.purple,
+  },
+  warningTitleText: {
+    color: Colors.light.purple,
+    fontWeight: '700',
+    fontSize: 14,
+  },
+  warningText: {
+    fontSize: 13,
+    color: '#4B5563',
+    textAlign: 'center',
+    lineHeight: 18,
   },
 });
